@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/logo.svg</file>
+        <file>images/hyw.ico</file>
+    </qresource>
+</RCC>
