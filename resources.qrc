@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>images/logo.svg</file>
         <file>images/hyw.ico</file>
+        <file>images/smartisanos.png</file>
     </qresource>
 </RCC>
