@@ -9,9 +9,13 @@ DtkSmartisanosLogo
 v0.1(应该是0.01)
 
 单应用图标下载
+
 1：选择下载模式
+
 2：输入应用包名
+
 3：选择下载位置
+
 4：预览并下载重绘图标
 
 ![v0.1预览图](https://github.com/houyawei-NO1/DtkSmartisanosLogo/blob/main/v0.1.jpg)
