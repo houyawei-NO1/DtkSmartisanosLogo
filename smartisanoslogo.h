@@ -20,6 +20,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QDateTime>
+#include <QJsonArray>
 DWIDGET_USE_NAMESPACE
 #ifndef DTKSERIALPORT_H
 #define DTKSERIALPORT_H

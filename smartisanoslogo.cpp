@@ -19,8 +19,8 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
     mode->setAlignment(Qt::AlignCenter);
     DComboBox *modecombobox= new DComboBox;
     modecombobox->addItem("单应用图标下载");
-    modecombobox->addItem("系统应用图标下载");
-    modecombobox->addItem("常见应用图标下载");
+    //modecombobox->addItem("系统应用图标下载");
+    modecombobox->addItem("常见应用图标批量下载");
     QHBoxLayout *namelayout = new QHBoxLayout(w);
     DLabel *name = new DLabel;
     name->setText("②应用名称：");
@@ -101,22 +101,61 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
 
                 case 0:
                 {
-                QString packagename = nameLineEdit->text();
-                //"com.sina.weibo" ;
-                QJsonObject obj;
-                obj.insert("package",packagename);
-                QJsonDocument jsonDoc(obj);
-                QNetworkReply* reply = accessManager->post(request, '[' + jsonDoc.toJson(QJsonDocument::Compact) + ']');
-
-
-
-
-
-                  }
+                    QString packagename = nameLineEdit->text();
+                    //"com.sina.weibo" ;
+                    QJsonObject obj;
+                    obj.insert("package",packagename);
+                    QJsonDocument jsonDoc(obj);
+                    QNetworkReply* reply = accessManager->post(request, '[' + jsonDoc.toJson(QJsonDocument::Compact) + ']');
+                    if (reply->isFinished())
+                        reply->deleteLater();
+                }
                 break;
 
                 case 1:
                {
+
+                QFile file("allapp.json");
+                if(file.open(QIODevice::ReadOnly | QIODevice::Text))
+                    {
+                    QString value = file.readAll();
+                    file.close();
+                    QJsonParseError parseJsonErr;
+                    QJsonDocument document = QJsonDocument::fromJson(value.toUtf8(), &parseJsonErr);
+
+                    if (! (parseJsonErr.error == QJsonParseError::NoError)) {
+                        QMessageBox::about(NULL, "提示", "配置文件错误！");
+                        return;
+                    }
+
+                    QJsonObject jsonObject = document.object();
+
+                    QJsonObject::Iterator it;
+                    QString keyString="";
+                    QString valueString="";
+                    for(it=jsonObject.begin();it!=jsonObject.end();it++)
+                       {
+//                           QString value=it.value().toString();
+//                           keyString=it.key()+","+keyString;
+//                           valueString="'"+value+"',"+valueString;
+                             qDebug()<<"======================================"<<it.key()<<endl;
+                             QString packagename = it.key();
+                             //"com.sina.weibo" ;
+                             QJsonObject obj;
+                             obj.insert("package",packagename);
+                             QJsonDocument jsonDoc(obj);
+                             QNetworkReply* reply = accessManager->post(request, '[' + jsonDoc.toJson(QJsonDocument::Compact) + ']');
+                             if (reply->isFinished())
+                                 reply->deleteLater();
+
+                       }
+//                       keyString=keyString.left(keyString.length()-1);
+//                       valueString=valueString.left(valueString.length()-1);
+
+                }
+
+
+
                }
                 break;
 
