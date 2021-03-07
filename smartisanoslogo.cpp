@@ -3,6 +3,7 @@
 #include <DSearchEdit>
 #include <DTitlebar>
 #include <QNetworkAccessManager>
+static int num=0;
 SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
     : DMainWindow(parent)
 {
@@ -11,6 +12,14 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
     moveToCenter(this);
     SmartisanOsLogo::resize(900,700);
     SmartisanOsLogo::setMinimumSize(900,700);
+
+    QDir currDir = QCoreApplication::applicationDirPath();
+    //currDir.cdUp();
+    QString m_savePath = currDir.path();
+    QString filenameText = m_savePath;
+    filenameText.append("/allapp.json");
+
+
     QHBoxLayout *hlayout =new QHBoxLayout(w);
     QVBoxLayout *v1layout = new QVBoxLayout(w);
     QHBoxLayout *modelayout = new QHBoxLayout(w);
@@ -36,6 +45,8 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
     DLabel *logo = new DLabel;
     logo->setText("图标预览：");
     logo->setAlignment(Qt::AlignCenter);
+    titlebar()->setIcon(QIcon(":/images/iconfinder-icon.svg"));
+
 
 
 
@@ -92,6 +103,35 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
 
 
 
+     connect(modecombobox, &DComboBox::currentTextChanged, this, [ = ] {
+         switch (modecombobox->currentIndex()) {
+
+             case 0:
+             {
+               mode->setText("①下载模式:");
+               nameLineEdit->show();
+               name->setText("②应用名称：");
+               location->setText("③下载位置：");
+
+             }
+             break;
+
+             case 1:
+            {
+             name->setText(" ");
+             nameLineEdit->hide();
+             location->setText("②下载位置：");
+
+            }
+             break;
+
+             case 2:
+            {
+            }
+              break;
+
+         }
+     });
 
         //download button
         connect(Download, &DPushButton::clicked, this, [ = ] {
@@ -115,7 +155,7 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
                 case 1:
                {
 
-                QFile file("allapp.json");
+                QFile file(filenameText);
                 if(file.open(QIODevice::ReadOnly | QIODevice::Text))
                     {
                     QString value = file.readAll();
@@ -124,15 +164,20 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
                     QJsonDocument document = QJsonDocument::fromJson(value.toUtf8(), &parseJsonErr);
 
                     if (! (parseJsonErr.error == QJsonParseError::NoError)) {
-                        QMessageBox::about(NULL, "提示", "配置文件错误！");
+                        //QMessageBox::about(NULL, "提示", "配置文件错误！");
+                        DDialog dlg("提示", "配置文件错误！");
+                        dlg.addButton("好的", true, DDialog::ButtonWarning);
+                        dlg.setIcon(QIcon(":/images/hyw.ico"));
+                        dlg.exec();
                         return;
                     }
 
-                    QJsonObject jsonObject = document.object();
 
+                    QJsonObject jsonObject = document.object();
                     QJsonObject::Iterator it;
                     QString keyString="";
                     QString valueString="";
+
                     for(it=jsonObject.begin();it!=jsonObject.end();it++)
                        {
 //                           QString value=it.value().toString();
@@ -145,13 +190,26 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
                              obj.insert("package",packagename);
                              QJsonDocument jsonDoc(obj);
                              QNetworkReply* reply = accessManager->post(request, '[' + jsonDoc.toJson(QJsonDocument::Compact) + ']');
+                             name->setText("已下载图片"+QString::number(num)+"张");
                              if (reply->isFinished())
                                  reply->deleteLater();
+                             QEventLoop loop;
+                             QTimer::singleShot(20,&loop,SLOT(quit()));
+                             loop.exec();
 
                        }
+                    num=0;
 //                       keyString=keyString.left(keyString.length()-1);
 //                       valueString=valueString.left(valueString.length()-1);
 
+                }
+                else {
+                    //QMessageBox::about(NULL, "提示", "未找到文件allapp.json");
+                    DDialog dlg("提示", "未找到文件allapp.json");
+                    dlg.addButton("好的", true, DDialog::ButtonWarning);
+                    dlg.setIcon(QIcon(":/images/hyw.ico"));
+                    dlg.exec();
+                    return;
                 }
 
 
@@ -183,6 +241,8 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
                locationLineEdit->setText(PathName);
         });
 
+
+
 }
 SmartisanOsLogo::~SmartisanOsLogo()
 {
@@ -197,7 +257,7 @@ void SmartisanOsLogo::finishedSlot(QNetworkReply *reply)
              QStringList urlpngList=urlpng.split(QRegExp("[\"]"));
              qDebug()<<"urlpngList"<<urlpngList[9];
              logoPng->setPixmap(setpnglabel(urlpngList[9]));
-
+             if(urlpngList[9].size()>20 ) num++;
              QString fileName = /*"/home/houyawei/Pictures/"*/PathName + '/' + urlpngList[5] + ".png";
              QString url_name= urlpngList[9];	//ui->url_text为Qline edit控件
              downIURL_to_picture(url_name,fileName);//将URL地址和要保存的文件名字传给函数调用

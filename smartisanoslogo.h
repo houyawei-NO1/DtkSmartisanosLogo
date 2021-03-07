@@ -21,6 +21,7 @@
 #include <QFileDialog>
 #include <QDateTime>
 #include <QJsonArray>
+#include <QTimer>
 DWIDGET_USE_NAMESPACE
 #ifndef DTKSERIALPORT_H
 #define DTKSERIALPORT_H
@@ -40,9 +41,11 @@ public:
      DPushButton *filelocation = new DPushButton();
      QString PathName,current_File;
      QDateTime current_File_time;
+
 private:
     QWidget *w=new QWidget;
     void setTheme(DGuiApplicationHelper::ColorType);
+
 private slots:
     void finishedSlot(QNetworkReply* reply);
 };

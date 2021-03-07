@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
     DApplication a(argc, argv);
     a.setOrganizationName("deepin");
     a.setApplicationName("dtk_Smartisanos图标下载助手");
-    a.setApplicationVersion("0.02");
-    a.setProductIcon(QIcon(":/images/hyw.ico"));
+    a.setApplicationVersion("0.3");
+    a.setProductIcon(QIcon(":/images/smartisan.ico"));
     a.setProductName("DTK_Smartisanos图标下载助手");
     a.setApplicationDescription("这是一个DTK_Smartisanos图标下载助手应用");
 

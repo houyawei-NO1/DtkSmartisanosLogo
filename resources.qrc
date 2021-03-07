@@ -3,5 +3,8 @@
         <file>images/logo.svg</file>
         <file>images/hyw.ico</file>
         <file>images/smartisanos.png</file>
+        <file>images/smartisan.ico</file>
+        <file>images/smartisan.png</file>
+        <file>images/iconfinder-icon.svg</file>
     </qresource>
 </RCC>
