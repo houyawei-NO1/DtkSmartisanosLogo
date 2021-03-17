@@ -49,3 +49,7 @@ v0.3
 ![v0.3_2预览图](https://github.com/houyawei-NO1/DtkSmartisanosLogo/blob/main/v0.3_2.jpg)
 
 ![v0.3_3预览图](https://github.com/houyawei-NO1/DtkSmartisanosLogo/blob/main/v0.3_3.jpg)
+
+v0.4添加取消下载（批量下载模式时）按键
+
+![v0.4预览图](https://github.com/houyawei-NO1/DtkSmartisanosLogo/blob/main/v0.4.jpg)

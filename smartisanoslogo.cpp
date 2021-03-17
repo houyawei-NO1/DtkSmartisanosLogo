@@ -12,6 +12,7 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
     moveToCenter(this);
     SmartisanOsLogo::resize(900,700);
     SmartisanOsLogo::setMinimumSize(900,700);
+    static bool Is_Cancel=false;
 
     QDir currDir = QCoreApplication::applicationDirPath();
     //currDir.cdUp();
@@ -62,6 +63,9 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
     Smartisan->setPixmap(QPixmap::fromImage(*img));
     DPushButton *Download = new DPushButton();
     Download->setText("预览并下载");
+    DPushButton *Cancel = new DPushButton();
+    Cancel->setText("取消下载");
+    Cancel->setDisabled(true);
 
     //DTextEdit *messageBox2 = new DTextEdit;
 
@@ -93,6 +97,7 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
     v2layout->addWidget(Smartisan,1);
     v2layout->addStretch(1);
     v2layout->addWidget(Download,3);
+    v2layout->addWidget(Cancel,3);
     v2layout->addStretch(2);
 
     QNetworkAccessManager *accessManager = new QNetworkAccessManager(this);
@@ -154,7 +159,8 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
 
                 case 1:
                {
-
+                Cancel->setEnabled(true);
+                Is_Cancel=false;
                 QFile file(filenameText);
                 if(file.open(QIODevice::ReadOnly | QIODevice::Text))
                     {
@@ -196,6 +202,7 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
                              QEventLoop loop;
                              QTimer::singleShot(20,&loop,SLOT(quit()));
                              loop.exec();
+                             if(Is_Cancel==true)return;
 
                        }
                     num=0;
@@ -241,6 +248,18 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
                locationLineEdit->setText(PathName);
         });
 
+        //cancel download status
+        connect(Cancel,&DPushButton::clicked,this,[ = ]{
+            if(Is_Cancel==false)
+            {
+                Is_Cancel=true;
+                Cancel->setDisabled(true);
+            }
+//            if(Is_Cancel==false)
+//            {
+//                Is_Cancel=true;
+//            }
+        });
 
 
 }
