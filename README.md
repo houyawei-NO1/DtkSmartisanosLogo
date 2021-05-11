@@ -54,3 +54,6 @@ v0.3
 v0.4添加取消下载（批量下载模式时）按键
 
 ![v0.4预览图](https://github.com/houyawei-NO1/DtkSmartisanosLogo/blob/main/v0.4.jpg)
+
+
+v0.5 字符串解析改为json解析，便于后面取历史图标的多个URL
