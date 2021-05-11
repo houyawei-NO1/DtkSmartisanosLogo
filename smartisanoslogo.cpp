@@ -291,7 +291,7 @@ void SmartisanOsLogo::finishedSlot(QNetworkReply *reply)
                  {
 
                      if(jsonDoc.isObject())
-                         qDebug()<<jsonDoc;
+//                         qDebug()<<jsonDoc;
                      {
                          QJsonObject obj = jsonDoc.object();
                          if(obj.contains("body"))
@@ -305,26 +305,31 @@ void SmartisanOsLogo::finishedSlot(QNetworkReply *reply)
                                       QJsonValue bodyvalue = bodyobj.value("app_icon");
                                      if(bodyvalue.isObject())
                                      {
-                                         qDebug()<<bodyvalue;
+                                         qDebug()<<"bodyvalue"<<bodyvalue;
                                          QJsonObject app_icon = bodyvalue.toObject();
                                          QJsonValue  app_iconvalue =  app_icon.value(PKG_NAME);
-                                         qDebug()<<app_iconvalue;
+                                         qDebug()<<"app_iconvalue"<<app_iconvalue;
                                          if(app_iconvalue.isArray())
                                          {
                                              QJsonArray array = app_iconvalue.toArray();
-                                             qDebug()<<array;
+                                             qDebug()<<"array"<<array;
                                              int nSize = array.size();
                                              for (int i = 0; i < nSize; ++i)
                                              {
                                                      QJsonValue arrayvalue = array.at(i);
-                                                     qDebug()<<arrayvalue;
+                                                     QString fileName;
+                                                     qDebug()<<"arrayvalue"<<arrayvalue;
                                                      if(arrayvalue.isObject())
                                                      {
                                                          QJsonObject arrayobject  = arrayvalue.toObject();
                                                          QJsonValue logovalue = arrayobject.value("logo");
-                                                         qDebug()<<logovalue;
+                                                         qDebug()<<"logovalue"<<logovalue;
                                                          num++;
-                                                         QString fileName = PathName + '/' + PKG_NAME + ".png";
+
+                                                         if(i==0)
+                                                                 fileName = PathName + '/' + PKG_NAME + ".png";
+                                                         else
+                                                                 fileName = PathName + '/' + PKG_NAME +  QString::number(i)+".png";
                                                          if(logovalue.isString())
                                                          {
                                                              QString url_name= logovalue.toString();

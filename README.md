@@ -57,3 +57,8 @@ v0.4添加取消下载（批量下载模式时）按键
 
 
 v0.5 字符串解析改为json解析，便于后面取历史图标的多个URL
+
+v0.6 支持历史图标下载（仅支持手机替换图标内显示的多个历史图标下载，官方移除的无法下载）
+
+![v0.6预览图](https://github.com/houyawei-NO1/DtkSmartisanosLogo/blob/main/v0.6.png)
+
