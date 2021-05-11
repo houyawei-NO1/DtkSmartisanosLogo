@@ -147,6 +147,7 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
                 case 0:
                 {
                     QString packagename = nameLineEdit->text();
+                    PKG_NAME = packagename;
                     //"com.sina.weibo" ;
                     QJsonObject obj;
                     obj.insert("package",packagename);
@@ -272,35 +273,76 @@ void SmartisanOsLogo::finishedSlot(QNetworkReply *reply)
     if (reply->error() == QNetworkReply::NoError)
          {
              QByteArray bytes = reply->readAll();
-             QString urlpng = QString(bytes);
-             QStringList urlpngList=urlpng.split(QRegExp("[\"]"));
-             qDebug()<<"urlpngList"<<urlpngList[9];
-             logoPng->setPixmap(setpnglabel(urlpngList[9]));
-             if(urlpngList[9].size()>20 ) num++;
-             QString fileName = /*"/home/houyawei/Pictures/"*/PathName + '/' + urlpngList[5] + ".png";
-             QString url_name= urlpngList[9];	//ui->url_text为Qline edit控件
-             downIURL_to_picture(url_name,fileName);//将URL地址和要保存的文件名字传给函数调用
+//             QString urlpng = QString(bytes);
+//             QStringList urlpngList=urlpng.split(QRegExp("[\"]"));
+//             qDebug()<<"urlpngList"<<urlpngList[9];
+//             logoPng->setPixmap(setpnglabel(urlpngList[9]));
+//             if(urlpngList[9].size()>20 ) num++;
+//             QString fileName = /*"/home/houyawei/Pictures/"*/PathName + '/' + urlpngList[5] + ".png";
+//             QString url_name= urlpngList[9];	//ui->url_text为Qline edit控件
+//             downIURL_to_picture(url_name,fileName);//将URL地址和要保存的文件名字传给函数调用
 
-//             QJsonParseError e;
-//             QJsonDocument jsonDoc = QJsonDocument::fromJson(bytes, &e);
-//             if (e.error == QJsonParseError::NoError && !jsonDoc.isNull())
-//             {
+             QJsonParseError e;
+             QJsonDocument jsonDoc = QJsonDocument::fromJson(bytes, &e);
+             if (e.error == QJsonParseError::NoError && !jsonDoc.isNull())
+             {
 
-//                 if((!jsonDoc.isNull()) || (!jsonDoc.isEmpty()))
-//                 {
+                 if((!jsonDoc.isNull()) || (!jsonDoc.isEmpty()))
+                 {
 
-//                     if(jsonDoc.isObject())
-//                     {
-//                         QJsonObject obj = jsonDoc.object();
-//                         qDebug()<<"obj"<<obj;
-//                         if(obj.contains(QString("logo")))
-//                         {
-//                             QString body = obj.value("head").toString();
-//                             qDebug()<<"body"<<body;
-//                          }
-//                     }
-//                  }
-//             }
+                     if(jsonDoc.isObject())
+                         qDebug()<<jsonDoc;
+                     {
+                         QJsonObject obj = jsonDoc.object();
+                         if(obj.contains("body"))
+                         {
+                             QJsonValue body = obj.value("body");
+                             if(body.isObject())
+                             {
+                                 QJsonObject bodyobj  = body.toObject();
+                                 if(bodyobj.contains("app_icon"))
+                                 {
+                                      QJsonValue bodyvalue = bodyobj.value("app_icon");
+                                     if(bodyvalue.isObject())
+                                     {
+                                         qDebug()<<bodyvalue;
+                                         QJsonObject app_icon = bodyvalue.toObject();
+                                         QJsonValue  app_iconvalue =  app_icon.value(PKG_NAME);
+                                         qDebug()<<app_iconvalue;
+                                         if(app_iconvalue.isArray())
+                                         {
+                                             QJsonArray array = app_iconvalue.toArray();
+                                             qDebug()<<array;
+                                             int nSize = array.size();
+                                             for (int i = 0; i < nSize; ++i)
+                                             {
+                                                     QJsonValue arrayvalue = array.at(i);
+                                                     qDebug()<<arrayvalue;
+                                                     if(arrayvalue.isObject())
+                                                     {
+                                                         QJsonObject arrayobject  = arrayvalue.toObject();
+                                                         QJsonValue logovalue = arrayobject.value("logo");
+                                                         qDebug()<<logovalue;
+                                                         num++;
+                                                         QString fileName = PathName + '/' + PKG_NAME + ".png";
+                                                         if(logovalue.isString())
+                                                         {
+                                                             QString url_name= logovalue.toString();
+                                                            logoPng->setPixmap(setpnglabel(url_name));
+                                                             downIURL_to_picture(url_name,fileName);//将URL地址和要保存的文件名字传给函数调用
+                                                             qDebug()<<url_name<<"  "<<fileName;
+                                                           }
+                                                      }
+
+                                                }
+                                     }
+                                 }
+                             }
+
+                          }
+                     }
+                  }
+             }
              //qDebug() << bytes;
          }
          else
@@ -310,7 +352,7 @@ void SmartisanOsLogo::finishedSlot(QNetworkReply *reply)
              qDebug(qPrintable(reply->errorString()));
          }
          reply->deleteLater();
-}
+}}
 
 QPixmap SmartisanOsLogo::setpnglabel(const QString &szUrl)
 {
@@ -325,7 +367,7 @@ QPixmap SmartisanOsLogo::setpnglabel(const QString &szUrl)
     QPixmap pix;
     pix.loadFromData(jpegData);
     return pix;
-    //logoPng->setPixmap(pix);
+//    logoPng->setPixmap(pix);
 }
 bool SmartisanOsLogo::downIURL_to_picture(const QString &url, const QString &fileName)
 {

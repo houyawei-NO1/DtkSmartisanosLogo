@@ -41,6 +41,7 @@ public:
      DPushButton *filelocation = new DPushButton();
      QString PathName,current_File;
      QDateTime current_File_time;
+     QString PKG_NAME;
 
 private:
     QWidget *w=new QWidget;
