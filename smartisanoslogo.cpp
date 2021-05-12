@@ -29,8 +29,8 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
     mode->setAlignment(Qt::AlignCenter);
     DComboBox *modecombobox= new DComboBox;
     modecombobox->addItem("单应用图标下载");
-    //modecombobox->addItem("系统应用图标下载");
     modecombobox->addItem("常见应用图标批量下载");
+    modecombobox->addItem("系统应用图标下载");
     QHBoxLayout *namelayout = new QHBoxLayout(w);
     DLabel *name = new DLabel;
     name->setText("②应用名称：");
@@ -132,6 +132,11 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
 
              case 2:
             {
+             name->setText(" ");
+             nameLineEdit->hide();
+             location->setText("②下载位置：");
+             Download->setText("打包下载");
+             logo->setText("");
             }
               break;
 
@@ -220,13 +225,15 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
                     return;
                 }
 
-
-
                }
                 break;
 
                 case 2:
                {
+//                QString url= "https://raw.fastgit.org/houyawei-NO1/DtkSmartisanosLogo/main/DT2002C_%E5%9D%9A%E6%9E%9CR2/CloudSyncShare_8.1.3.png";
+                QString url="https://raw.fastgit.org/houyawei-NO1/DtkSmartisanosLogo/main/DT2002C_%E5%9D%9A%E6%9E%9CR2.zip";
+                QString name = PathName + '/' + "SmartianOS系统应用图标" + ".zip";
+                downIURL_to_picture(url,name);
                }
                 break;
 
