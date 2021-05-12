@@ -62,3 +62,15 @@ v0.6 支持历史图标下载（仅支持手机替换图标内显示的多个历
 
 ![v0.6预览图](https://github.com/houyawei-NO1/DtkSmartisanosLogo/blob/main/v0.6.png)
 
+
+v0.7支持系统应用图标下载
+
+仅支持打包下载，速度较慢
+
+![v0.7.1预览图](https://github.com/houyawei-NO1/DtkSmartisanosLogo/blob/main/v0.7.1.jpg)
+
+![v0.7.2预览图](https://github.com/houyawei-NO1/DtkSmartisanosLogo/blob/main/v0.7.2.jpg)
+
+
+
+
