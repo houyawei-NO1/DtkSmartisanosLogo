@@ -299,7 +299,6 @@ void SmartisanOsLogo::finishedSlot(QNetworkReply *reply)
                  {
 
                      if(jsonDoc.isObject())
-                         qDebug()<<jsonDoc;
                      {
                          QJsonObject obj = jsonDoc.object();
                          if(obj.contains("body"))
@@ -313,25 +312,20 @@ void SmartisanOsLogo::finishedSlot(QNetworkReply *reply)
                                       QJsonValue bodyvalue = bodyobj.value("app_icon");
                                      if(bodyvalue.isObject())
                                      {
-                                         qDebug()<<"bodyvalue"<<bodyvalue;
                                          QJsonObject app_icon = bodyvalue.toObject();
                                          QJsonValue  app_iconvalue =  app_icon.value(PKG_NAME);
-                                         qDebug()<<"app_iconvalue"<<app_iconvalue;
                                          if(app_iconvalue.isArray())
                                          {
                                              QJsonArray array = app_iconvalue.toArray();
-                                             qDebug()<<"array"<<array;
                                              int nSize = array.size();
                                              for (int i = 0; i < nSize; ++i)
                                              {
                                                      QJsonValue arrayvalue = array.at(i);
                                                      QString fileName;
-                                                     qDebug()<<"arrayvalue"<<arrayvalue;
                                                      if(arrayvalue.isObject())
                                                      {
                                                          QJsonObject arrayobject  = arrayvalue.toObject();
                                                          QJsonValue logovalue = arrayobject.value("logo");
-                                                         qDebug()<<"logovalue"<<logovalue;
                                                          num++;
 
                                                          if(i==0)
@@ -342,8 +336,7 @@ void SmartisanOsLogo::finishedSlot(QNetworkReply *reply)
                                                          {
                                                              QString url_name= logovalue.toString();
                                                             logoPng->setPixmap(setpnglabel(url_name));
-                                                             downIURL_to_picture(url_name,fileName);//将URL地址和要保存的文件名字传给函数调用
-                                                             qDebug()<<url_name<<"  "<<fileName;
+                                                             downIURL_to_picture(url_name,fileName);
                                                            }
                                                       }
 
@@ -364,7 +357,8 @@ void SmartisanOsLogo::finishedSlot(QNetworkReply *reply)
              qDebug( "found error .... code: %d\n", (int)reply->error());
              qDebug(qPrintable(reply->errorString()));
          }
-         reply->deleteLater();
+             if (reply->isFinished())
+                 reply->deleteLater();
 }}
 
 QPixmap SmartisanOsLogo::setpnglabel(const QString &szUrl)
@@ -401,5 +395,7 @@ bool SmartisanOsLogo::downIURL_to_picture(const QString &url, const QString &fil
         return false;
     file.write(reply->readAll());
     file.close();
-    delete reply;
+    if (reply->isFinished())
+        reply->deleteLater();
+    return true;
  }
