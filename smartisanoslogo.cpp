@@ -197,7 +197,8 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
 //                           valueString="'"+value+"',"+valueString;
                              qDebug()<<"======================================"<<it.key()<<endl;
                              QString packagename = it.key();
-                             //"com.sina.weibo" ;
+//                             QString packagename = "com.sina.weibo" ;
+                             PKG_NAME = packagename;
                              QJsonObject obj;
                              obj.insert("package",packagename);
                              QJsonDocument jsonDoc(obj);
@@ -206,7 +207,7 @@ SmartisanOsLogo::SmartisanOsLogo(DMainWindow *parent)
                              if (reply->isFinished())
                                  reply->deleteLater();
                              QEventLoop loop;
-                             QTimer::singleShot(20,&loop,SLOT(quit()));
+                             QTimer::singleShot(150,&loop,SLOT(quit()));
                              loop.exec();
                              if(Is_Cancel==true)return;
 
@@ -298,7 +299,7 @@ void SmartisanOsLogo::finishedSlot(QNetworkReply *reply)
                  {
 
                      if(jsonDoc.isObject())
-//                         qDebug()<<jsonDoc;
+                         qDebug()<<jsonDoc;
                      {
                          QJsonObject obj = jsonDoc.object();
                          if(obj.contains("body"))
