@@ -4,6 +4,7 @@
 
 ### 获取锤科SmartisanOS系统绘制应用图标
 
+https://github.com/houyawei-NO1/DtkSmartisanosLogo
 
 ![新建文件夹](https://github.com/houyawei-NO1/DtkSmartisanosLogo/blob/main/%E8%AE%BE%E8%AE%A1%E5%9B%BE.jpg)
 
